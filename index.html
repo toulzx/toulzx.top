@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8"/>
+        <meta name="author" content="白砂糖"/>
+        <meta name="description" content="这是我创建的个人网站，方向未定。"/>
+        <meta name="copyright" content="该网站为个人版权所有"/>
+        <meta name="revisit-after" content="7 days"/>
+        <meta name="renderer" content="webkit"/>
+        <meta http-equiv="Cache-Control" content="no-siteapp"/>
+
+        <title>小白屋</title>
+
+        <style>
+            /* 布局 */
+            body {
+                padding: 0;
+                margin: 0;
+            }
+            #welcome {
+                position: absolute;
+                top: 40%;
+                left: 42%;
+            }
+            hr{
+                padding: 0;
+                margin: 0;
+                width: 20%;
+                color: gainsboro;
+            }
+            a {
+                text-decoration: none;
+            }
+            a:hover {
+                color: cornflowerblue;
+                cursor: pointer;
+            }
+            a:visited {
+                color: darkgrey;
+            }
+            .highlight {
+                color: royalblue;
+            }
+            button#myEmail {
+                /* button与#myEmail不能分开 */
+                border: 0; 
+                cursor: pointer;
+            }
+            #main {
+                display: none;
+                grid-template-columns: 25% 50% 25%;
+                grid-gap: 0 0;
+                grid-template-areas:
+                                     ". self_introduction ."
+                                     ". update_log        .";
+            }
+            #self_introduction {
+                grid-column-start: self_introduction-start;
+                grid-column-end: self_introduction-end;
+                padding: 10px;
+                margin: 20px 0 0 0;
+            }
+            #update_log {
+                grid-column-start: update_log-start;
+                grid-column-end: update_log-end;
+                padding: 10px;
+                margin: 20px 0 0 0;
+
+            }
+            
+            /* 动画 */
+            .at-item-welcome {
+                color: black;
+                animation-name: focus-in-contract;
+                animation-duration: 1.8s;
+                animation-timing-function: ease;
+                animation-delay: 0s;
+                animation-iteration-count: 2;
+                animation-direction: alternate;
+                animation-fill-mode: none;
+            }
+            @keyframes focus-in-contract {
+            0%{
+                letter-spacing: 1em;
+                filter: blur(12px);
+                opacity: 0;
+            }
+            60%{
+                filter: blur(0);
+                opacity: 1;
+            }
+            100%{
+                filter: blur(0);
+                opacity: 1;
+            }
+            }/* js有个延迟函数让它消失 */
+            
+            .at-item-main {
+                animation-name: text-blur-out;
+                animation-duration: 1s;
+                animation-timing-function: ease-in;
+                animation-delay: 0s;
+                animation-iteration-count: 1;
+                animation-direction: reverse;
+                animation-fill-mode: none;
+            }
+            @keyframes text-blur-out {
+            0%{
+                filter: blur(.01);
+            }
+            70%{
+                filter: blur(12px) opacity(0%);
+            }
+            100%{
+                filter: blur(12px) opacity(0%);
+            }
+            }
+        </style>
+    </head>
+
+    <body id="body">
+        <h1 id="welcome" class="at-item-welcome">嘿，你终于来了！</h1>
+        <div id="main" class="at-item-main">
+            <div id="self_introduction">
+                <h2>关于...</h2>
+                <hr></hr>
+                <h4>我是谁？</h4>
+                <p>代号<span class="highlight">白砂糖</span>，很高兴认识你。</p>
+                <h4>我在这里干啥？</h4>
+                <p>这是我的个人网站，我会定期利用所学为它添加新功能。</p>
+                <!-- <h4>为啥这么简陋！</h4>
+                <p>接触前端差不多一年的时间里，我先后接触了:
+                <ul>
+                    <li>HTML</li>
+                    <li>CSS</li>
+                    <li>Javascript</li>
+                    <li>jQuery</li>
+                    <li>Vue.js</li>
+                    <li>Element UI</li>
+                    <li>SASS</li>
+                    <li>...</li>
+                </ul>
+                但即便用他们做了几个前端的项目，但仍旧时常觉得力不从心，我想可能是因为对于他们大多我都是囫囵吞枣式地学习的，
+                只知其表，不知其里。
+                <br/>
+                所以...在一年之后的今天，我决定回到起点，重新从html开始摸索。它可能很长一段的时间都丑的可以，
+                只能委屈访问者们容忍一下了嘿嘿。
+                </p> -->
+                <h4>通讯方式？</h4>
+                <p>如果您对该web项目有任何建议，欢迎通过邮件<Button id="myEmail" type="button" onClick="textCopy()">820458126@qq.com</Button>联系我。</p>
+                <h4>更多...</h4>
+                <p>我会在语雀上更新该项目的<a title="踩坑笔记" target=“blank” href="https://www.yuque.com/books/share/fe64686a-b98f-45ef-94e5-15e6f7d846f5?">踩坑（学习）记录</a>。</p>
+            </div>
+            <div id="update_log">
+                <h2>此项目的更新日志orz</h2>
+                <hr></hr>
+                <h5>2020-09-29</h5>
+                <p>服务器、域名购买</p>
+                <h5>2020-09-30</h5>
+                <ul>
+                    <li>网页初版上架，包含<span class="highlight">关于</span>和<span class="highlight">日志</span>两个部分</li>
+                    <li>新增动画：初始化</li>
+                </ul>
+                
+                
+            </div>
+        </div>
+        
+        
+
+
+        <script>
+            var maxWidth = window.screen.width-getScrollWidth();
+            document.getElementById("body").style.width = maxWidth+"px";
+            window.onload = function(){
+                // console.log(document.documentElement.scrollLeft);
+                // console.log(document.body.scrollLeft);
+                // console.log(window.screen.width);
+                // console.log(window.screen.availWidth);
+                // console.log(document.body.clientWidth);
+                // console.log(document.body.offsetWidth);
+                setTimeout(function () {
+                document.getElementById("welcome").style.display = "none";
+                }, 3500);
+                setTimeout(function () {
+                document.getElementById("main").style.display = "grid";
+                }, 3000);
+            }
+            function getScrollWidth() {
+                var noScroll, scroll, oDiv = document.createElement("div");
+                oDiv.style.cssText = "position:absolute; top:-1000px; width:100px; height:100px; overflowY:hidden;";
+                noScroll = document.body.appendChild(oDiv).clientWidth;
+                oDiv.style.overflowY = "scroll";
+                scroll = oDiv.clientWidth;
+                document.body.removeChild(oDiv);
+                return noScroll-scroll;
+            }
+            function textCopy(){
+                var el =  document.getElementById("myEmail");
+                var range = document.createRange();
+                var end = el.childNodes.length;
+                range.setStart(el,0);
+                range.setEnd(el,end);
+
+                var selection = window.getSelection();
+                selection.removeAllRanges();
+                selection.addRange(range);
+                var tag = document.execCommand("copy",false,null);
+                if(tag) alert("已复制！");
+                selection.removeRange(range);
+            }   
+            
+        </script>
+    </body>
+
+
+
+
+
+</html>
