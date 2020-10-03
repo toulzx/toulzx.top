@@ -11,19 +11,24 @@
 
         <meta name="viewport" content="width=device-width,minimum-scale=1.0" />
 
+        <link rel="stylesheet" type="text/css" href="mobile.css">
+        <link rel="stylesheet" type="text/css" href="pc.css">
+
         <title>小白屋</title>
 
         <style>
-            /* 布局 */
             body {
                 padding: 0;
                 margin: 0;
+                scrollbar-width: none; 
+                /* // firefox下滚动条不显示 */
+                -ms-overflow-style:none; 
+                /* // IE下滚动条不显示 */
+
             }
-            #welcome {
-                position: absolute;
-                top: 40%;
-                left: 42%;
-            }
+            body::-webkit-scrollbar {
+                display: none;
+            } /* // Chrome下滚动条不显示 */
             hr{
                 padding: 0;
                 margin: 0;
@@ -41,62 +46,20 @@
                 color: darkgrey;
             }
             .highlight {
-                color: royalblue;
+                color: #7294d4;
             }
             button#myEmail {
                 /* button与#myEmail不能分开 */
                 border: 0; 
                 cursor: pointer;
             }
-            #main {
-                display: none;
-                grid-template-columns: 25% 50% 25%;
-                grid-gap: 0 0;
-                grid-template-areas:
-                                     ". self_introduction ."
-                                     ". update_log        .";
-            }
-            #self_introduction {
-                grid-column-start: self_introduction-start;
-                grid-column-end: self_introduction-end;
-                padding: 10px;
-                margin: 20px 0 0 0;
-            }
-            #update_log {
-                grid-column-start: update_log-start;
-                grid-column-end: update_log-end;
-                padding: 10px;
-                margin: 20px 0 0 0;
 
-            }
-            
             /* 动画 */
-            .at-item-welcome {
-                color: black;
-                animation-name: focus-in-contract;
-                animation-duration: 1.8s;
-                animation-timing-function: ease;
-                animation-delay: 0s;
-                animation-iteration-count: 2;
-                animation-direction: alternate;
-                animation-fill-mode: none;
+            div#at-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
             }
-            @keyframes focus-in-contract {
-            0%{
-                letter-spacing: 1em;
-                filter: blur(12px);
-                opacity: 0;
-            }
-            60%{
-                filter: blur(0);
-                opacity: 1;
-            }
-            100%{
-                filter: blur(0);
-                opacity: 1;
-            }
-            }/* js有个延迟函数让它消失 */
-            
             .at-item-main {
                 animation-name: text-blur-out;
                 animation-duration: 1s;
@@ -107,21 +70,23 @@
                 animation-fill-mode: none;
             }
             @keyframes text-blur-out {
-            0%{
-                filter: blur(.01);
-            }
-            70%{
-                filter: blur(12px) opacity(0%);
-            }
-            100%{
-                filter: blur(12px) opacity(0%);
-            }
-            }
+                0%{
+                    filter: blur(.01);
+                }
+                70%{
+                    filter: blur(12px) opacity(0%);
+                }
+                100%{
+                    filter: blur(12px) opacity(0%);
+                }
+            }/* js有个延迟函数让它显示 */
+
+
         </style>
     </head>
 
     <body id="body">
-        <h1 id="welcome" class="at-item-welcome">嘿，你终于来了！</h1>
+        <div id="at-container"><h1 id="welcome" class="at-item-welcome">嘿，你终于来了！</h1></div>
         <div id="main" class="at-item-main">
             <div id="self_introduction">
                 <h2>关于...</h2>
@@ -157,11 +122,19 @@
                 <h2>此项目的更新日志orz</h2>
                 <hr></hr>
                 <h5>2020-09-29</h5>
-                <p>服务器、域名购买</p>
+                <ul>
+                    <li>服务器、域名购买</li>
+                </ul>
                 <h5>2020-09-30</h5>
                 <ul>
                     <li>网页初版上架，包含<span class="highlight">关于</span>和<span class="highlight">日志</span>两个部分</li>
                     <li>新增动画：初始化</li>
+                </ul>
+                <h5>2020-10-03</h5>
+                <ul>
+                    <li>修改手机端布局、调整字体大小</li>
+                    <li>修改手机端引导语动画</li>
+                    <li>改进引导语的布局方式</li>
                 </ul>
                 
                 
@@ -173,7 +146,10 @@
 
         <script>
             var maxWidth = window.screen.width-getScrollWidth();
+            var welcomeHeight = document.getElementById('at-container').offsetHeight;
+            document.getElementById("at-container").style.height = window.screen.height + "px";
             document.getElementById("body").style.width = maxWidth+"px";
+            document.getElementById("at-container").style.marginTop = -1 * welcomeHeight/2 + "px";
             window.onload = function(){
                 // console.log(document.documentElement.scrollLeft);
                 // console.log(document.body.scrollLeft);
@@ -181,12 +157,20 @@
                 // console.log(window.screen.availWidth);
                 // console.log(document.body.clientWidth);
                 // console.log(document.body.offsetWidth);
+                if(window.screen.width < 720){
+                    document.getElementById("welcome").innerText = "小窗口，大世界。";
+                    setTimeout(function () {
+                    document.getElementById("main").style.display = "block";
+                    }, 2000);
+                } else {
+                    setTimeout(function () {
+                    document.getElementById("main").style.display = "grid";
+                    }, 3000);
+                }
                 setTimeout(function () {
-                document.getElementById("welcome").style.display = "none";
+                document.getElementById("at-container").style.display = "none";
                 }, 3500);
-                setTimeout(function () {
-                document.getElementById("main").style.display = "grid";
-                }, 3000);
+                
             }
             function getScrollWidth() {
                 var noScroll, scroll, oDiv = document.createElement("div");
@@ -214,9 +198,6 @@
             
         </script>
     </body>
-
-
-
 
 
 </html>
