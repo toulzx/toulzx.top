@@ -3,13 +3,16 @@
         font-size: 9px;
     }
     h1 {
-        font-size: 21px;
+        font-size: 24px;
     }
     h2 {
-        font-size: 18px;
+        font-size: 21px;
     }
     h4 {
-        font-size: 12px;
+        font-size: 15px;
+    }
+    ul {
+        margin: 0;
     }
     #welcome {
         font-weight: normal;
@@ -23,14 +26,14 @@
     }
     #update_log {
         padding: 20px;
-        margin: 20px 0 0 0;
+        margin:  0 0 20px 0;
     }
 
     /* 动画 */
     .at-item-welcome {
         color: #3079ed;
         animation-name: text-shadow-multicolor2;
-        animation-duration: 3s;
+        animation-duration: 3.6s;
         animation-timing-function: ease-in-out;
         animation-delay: 0s;
         animation-iteration-count: 1;

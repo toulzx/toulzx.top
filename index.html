@@ -29,11 +29,22 @@
             body::-webkit-scrollbar {
                 display: none;
             } /* // Chrome下滚动条不显示 */
-            hr{
+            .HR {
                 padding: 0;
                 margin: 0;
-                width: 20%;
+                display: grid;
+                grid-template-columns: 25% 25% 25% 25%;
+                grid-gap: 0 0 0;
+                grid-template-areas:  "HR . . .";
+            }
+             hr{
+                grid-column-start: HR-start;
+                grid-column-end: HR-end;
+                padding: 0;
+                margin: 0;
+                width: 100%;
                 color: gainsboro;
+                background-color: gainsboro;
             }
             a {
                 text-decoration: none;
@@ -90,7 +101,7 @@
         <div id="main" class="at-item-main">
             <div id="self_introduction">
                 <h2>关于...</h2>
-                <hr></hr>
+                <div class="HR"><hr></hr></div>
                 <h4>我是谁？</h4>
                 <p>代号<span class="highlight">白砂糖</span>，很高兴认识你。</p>
                 <h4>我在这里干啥？</h4>
@@ -120,7 +131,7 @@
             </div>
             <div id="update_log">
                 <h2>此项目的更新日志orz</h2>
-                <hr></hr>
+                <div class="HR"><hr></hr></div>
                 <h5>2020-09-29</h5>
                 <ul>
                     <li>服务器、域名购买</li>
@@ -147,21 +158,21 @@
         <script>
             var maxWidth = window.screen.width-getScrollWidth();
             var welcomeHeight = document.getElementById('at-container').offsetHeight;
-            document.getElementById("at-container").style.height = window.screen.height + "px";
             document.getElementById("body").style.width = maxWidth+"px";
-            document.getElementById("at-container").style.marginTop = -1 * welcomeHeight/2 + "px";
+            document.getElementById("at-container").style.height = window.innerHeight + "px";
             window.onload = function(){
                 // console.log(document.documentElement.scrollLeft);
-                // console.log(document.body.scrollLeft);
+                // console.log(document.body.scrollHeight);
                 // console.log(window.screen.width);
-                // console.log(window.screen.availWidth);
-                // console.log(document.body.clientWidth);
-                // console.log(document.body.offsetWidth);
+                // console.log(window.screen.availHeight);
+                // console.log(document.body.clientHeight);
+                // console.log(document.body.offsetHeight);
+                // console.log(window.innerHeight);
                 if(window.screen.width < 720){
                     document.getElementById("welcome").innerText = "小窗口，大世界。";
                     setTimeout(function () {
                     document.getElementById("main").style.display = "block";
-                    }, 2000);
+                    }, 3000);
                 } else {
                     setTimeout(function () {
                     document.getElementById("main").style.display = "grid";
