@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8"/>
+        <meta name="viewport" content="width=device-width,minimum-scale=1.0" />
+        <title>212日常留影</title>
+
+
+        <style>
+            * {
+                padding: 0;
+                margin: 0;
+                border: none;
+            }
+            body {
+                visibility: hidden;
+            }
+            h1 {
+                text-align: center;
+                margin: 20px 0;
+            }
+            #photo_container {
+                width: 100%;
+            }
+            img {
+                width: 100%;
+            }
+            .item {
+                /* 这个很重要 */
+                box-sizing: border-box;
+                margin: 0;
+                padding: 10px;
+                position: absolute;
+            }
+            .item img:hover {
+                opacity: 0.5;
+            }
+            #tip {
+                font-size: 13px;
+                text-align: center;
+                color: grey;
+                margin: 30px 0;
+            }
+        </style>
+    </head>
+    <body id="body">
+        <h1>枯燥无味的生活</h1>
+        <div id="photo_container">
+            <div class="item"> <img src="images/1.jpg" alt=""> </div>
+            <div class="item"> <img src="images/2.jpg" alt=""> </div>
+            <div class="item"> <img src="images/3.jpg" alt=""> </div>
+            <div class="item"> <img src="images/4.jpg" alt=""> </div>
+            <div class="item"> <img src="images/5.jpg" alt=""> </div>
+            <div class="item"> <img src="images/6.jpg" alt=""> </div>
+            <div class="item"> <img src="images/7.jpg" alt=""> </div>
+            <div class="item"> <img src="images/1.jpg" alt=""> </div>
+            <div class="item"> <img src="images/2.jpg" alt=""> </div>
+            <div class="item"> <img src="images/3.jpg" alt=""> </div>
+            <div class="item"> <img src="images/4.jpg" alt=""> </div>
+            <div class="item"> <img src="images/5.jpg" alt=""> </div>
+            <div class="item"> <img src="images/6.jpg" alt=""> </div>
+            <div class="item"> <img src="images/7.jpg" alt=""> </div>
+        </div>
+        <p id="tip">努力加载中...</p>
+
+
+
+        <script>
+            
+            var data = [
+                {src:"1.jpg"},
+                {src:"2.jpg"},
+                {src:"3.jpg"},
+                {src:"4.jpg"},
+                {src:"5.jpg"},
+                {src:"6.jpg"},
+                {src:"7.jpg"},
+                {src:"6.jpg"},
+                {src:"6.jpg"},
+                {src:"6.jpg"},
+            ]
+            var data_haveLoaded = -1;
+            var maxWidth = window.screen.width - getScrollWidth();
+            var contentWidth = 0.618*maxWidth;
+            //先确定呈现区域宽度👇
+            // document.getElementById("body").style.width = contentWidth + "px";
+            // console.log(maxWidth);
+            // console.log(document.getElementById("body").style.width);
+
+            //瀑布流👇
+            var photo_container  = document.getElementById("photo_container");
+            var boxes = photo_container.getElementsByClassName("item");
+            var itemWidth = contentWidth/3;//设置每行图片数为3
+            var items = document.getElementsByClassName("item");
+            var ori_itemsLenth = items.length;
+            for(let i=0; i<items.length; i++){items[i].style.width = itemWidth + "px";} 
+            var hArray = new Array;//存储每列图片距离顶端的绝对高度
+
+            function waterfall(photo_container,boxes,data_haveLoaded) {
+                var i = 0;
+                if(data_haveLoaded>-1){
+                    // console.log("这没问题");
+                    i = data_haveLoaded + ori_itemsLenth;
+                    
+                    // console.log(data_haveLoaded +"  "+ i);
+                } 
+                for(; i<items.length; i++){
+                    if(i<3){
+                        hArray[i] = document.getElementById("photo_container").offsetTop;//绝对定位基于页面最顶部
+                        items[i].style.top = hArray[i] + "px";
+                        // hArray[i] += items[i].style.height; //是不行的，因为css中并未明确定义height的值！
+                        hArray[i] += items[i].clientHeight;//？？还有待验证精确度
+                        // console.log("%f",items[i].clientHeight);
+                        items[i].style.left = 0.5*(1-0.618)*maxWidth + itemWidth*i + "px";
+                    }else{
+                        var minHeight = Math.min(hArray[0],Math.min(hArray[1],hArray[2]));
+                        // var minIndex = function(){
+                        //     if(minHeight == hArray[0]) return 0;
+                        //     else if(minHeight == hArray[1]) return 1;
+                        //     else return 2;
+                        // }//错误，原因？？？
+                        var minIndex = -1;
+                        if(minHeight == hArray[0]) minIndex = 0;
+                        else if(minHeight == hArray[1]) minIndex = 1;
+                        else minIndex = 2;
+                        //获取最小高度及其序列（可继续优化）
+                        // console.log(minIndex);
+                        items[i].style.top = hArray[minIndex] + "px";//cccc我tm是煞笔吗，为啥要写i%3啊啊啊啊
+                        hArray[minIndex] += items[i].clientHeight;
+                        items[i].style.left = 0.5*(1-0.618)*maxWidth + itemWidth*minIndex + "px";
+                    }
+                    // console.log(hArray[0]+" "+hArray[1]+" "+hArray[2]);
+                    // console.log(items[i].clientHeight);
+                    // console.log(items[i].offsetTop+"  "+items[i].style.top);
+                    photo_container.style.height = Math.max(hArray[0],Math.max(hArray[1],hArray[2])) + "px";
+                }
+                // console.log(hArray);
+            }
+            function getScrollWidth() {
+                var noScroll, scroll, oDiv = document.createElement("div");
+                oDiv.style.cssText = "position:absolute; top:-1000px; width:100px; height:100px; overflowY:hidden;";
+                noScroll = document.body.appendChild(oDiv).clientWidth;
+                oDiv.style.overflowY = "scroll";
+                scroll = oDiv.clientWidth;
+                document.body.removeChild(oDiv);
+                return noScroll-scroll;
+            }
+            function lazyLoad(photo_container,boxes) {
+                if(data_haveLoaded == -1)data_haveLoaded++;//使由-1变成0，表示懒加载启动
+                // console.log(data_haveLoaded);
+                for(let i=data_haveLoaded;(i<data_haveLoaded+3)&&(i<data.length);i++){
+                    var newDiv = document.createElement('div');
+                    var newImg = document.createElement('img');
+                    newDiv.className = "item";
+                    newImg.src = "images/" + data[i].src;
+                    newDiv.style.width = itemWidth + "px";
+                    newDiv.appendChild(newImg);
+                    photo_container.appendChild(newDiv);
+                }
+                waterfall(photo_container,boxes,data_haveLoaded);
+                //每次只加载3张
+                if(data_haveLoaded+3>data.length) data_haveLoaded = data.length;
+                else data_haveLoaded += 3
+            }
+            
+
+
+            window.onload = function() {
+                if(window.screen.width < 720) {
+                   alert("请横屏后食用 (°ー°〃)"); 
+                   return false;
+                } 
+                setTimeout(function(){
+                    document.getElementById("body").style.visibility = "visible";
+                }, 100);
+                waterfall(photo_container,boxes,data_haveLoaded);
+            }
+            
+            window.onscroll =function(){//懒加载👇
+                //👇超级关键的判断条件
+                console.log(document.body.scrollHeight+"  "+document.body.scrollTop+"  "+window.innerHeight)
+                if(document.documentElement.scrollHeight ||document.body.scrollHeight < document.documentElement.scrollTop||document.body.scrollTop||window.pageYOffset + window.innerHeight){
+                    if(data_haveLoaded < data.length){
+                        setTimeout(function(){
+                            lazyLoad(photo_container,boxes)
+                        }, 600);
+                        //注意！没有function(){}包含无法成功延时！！！  
+                    }  
+                    else if(data_haveLoaded == data.length){
+                        let Para = document.getElementById('tip');
+                        Para.innerHTML = "什么？你还要？！";
+                        setTimeout(function(){
+                            Para.innerHTML = "真的没啦！";
+                        },500)
+                    }
+                }
+            }
+            // window.οnresize=function(){
+            //     alert("aaa")
+            //     location.reload();
+            // }
+
+        </script>
+    </body>
+
+
+</html>
